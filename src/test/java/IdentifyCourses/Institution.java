@@ -23,9 +23,6 @@ WebDriver driver;
 		PageFactory.initElements(driver,this);
 	}
 	
-     //Locators
-	 @FindBy(linkText="For Enterprise")
-	 WebElement enterprise;
 	 
 	 @FindBy(linkText ="For Campus")
 	 WebElement campus;
@@ -72,17 +69,9 @@ WebDriver driver;
 	 @FindBy(id="ValidMsgEmail")
 	 WebElement errormsgs;
 	 
-	
-	
-	//Action methods
-	public void ClickEnterprise()
+	public void campusclick() throws InterruptedException
 	{
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].scrollIntoView()", enterprise);
-	}
-	
-	public void campusclick()
-	{
+		Thread.sleep(5000);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView()", campus);
 		campus.click();

@@ -3,7 +3,6 @@ package IdentifyCourses;
 import java.time.Duration;
 import java.util.List;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,6 +32,24 @@ public class HomePage{
 	@FindBy(xpath="//input[@id='cds-react-aria-50']")
 	WebElement level;
 	
+	@FindBy(xpath="//button[@class='css-1bbqjkf']")
+	WebElement english;
+	
+	@FindBy(xpath="(//input[contains(@id,'cds-react-aria')])[1]")
+	WebElement selectEng;
+	
+	@FindBy(xpath="//button[contains(@class,'css-ra3hwj')]")
+	WebElement langShow;
+	
+	@FindBy(xpath="(//button[@class='css-1vwfrco'])[2]")
+	WebElement difficulty;
+	
+	@FindBy(xpath="(//input[contains(@id,'cds-react-aria')])[1]")
+	WebElement beginner;
+	
+	@FindBy(xpath="//button[contains(@class,'css-ra3hwj')]")
+	WebElement showRes;
+	
 	@FindBy(xpath="//h3[@class='cds-CommonCard-title css-6ecy9b']")
 	List<WebElement> c_title;
 	
@@ -61,25 +78,41 @@ public class HomePage{
 	@FindBy(xpath="//div[@class='css-q5d1os']/div")//-----languagebuttonselect
 	List<WebElement> linguals;
 	
+	@FindBy(xpath="//div[contains(@class,'cds-formGroup-groupWrapper')]/div")
+	List<WebElement> ling;
+	
 	@FindBy(xpath="//div[@data-testid='search-filter-group-Level']")//----locate  level button 
 	WebElement levelbutton;
 	
 	@FindBy(xpath="(//div[@class='css-5ji5n2'])[3]/div")//------list of level
 	List<WebElement> levellist;
-//	
+	
+	@FindBy(xpath="//div[contains(@class,'cds-formGroup-groupWrapper')]/div")
+	List<WebElement> leve;
 	
 	//action methods
 	public void clicksearch()//-------clicking the button 
 	{
+		
 		clicksearch.click();
+	}
+	public void english() throws InterruptedException
+	{
+		Thread.sleep(5000);  
+		english.click();
+	}
+	public void langShowResult() throws InterruptedException
+	{
+		Thread.sleep(5000);  
+		langShow.click();
 	}
 	public void languageselect() throws InterruptedException//------selecting language 
 	{
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click()",lang);
 	} 
-//		lang.click();
+
 	public void levelselect() throws InterruptedException//---------level select 
 	{
 		Thread.sleep(5000);
@@ -87,8 +120,9 @@ public class HomePage{
         js.executeScript("arguments[0].scrollIntoView()", level);
 	}
 
-	public void searchbutton() 
+	public void searchbutton() throws InterruptedException 
 		 {
+		Thread.sleep(5000);  
 		    	searchbutton.click();
 		    	searchbutton.sendKeys("Web Development Courses");
 		   }
@@ -171,5 +205,62 @@ public class HomePage{
 		return levelList;
 		}
 	
+	public void difficultyButton() throws InterruptedException 
+	 {
+		    Thread.sleep(5000);  
+	    	difficulty.click();
+	 }
+	public void beginnerCheckBox() throws InterruptedException 
+	 {
+		    Thread.sleep(5000);  
+	    	beginner.click();
+	 }
+	public void filterSearchButton() throws InterruptedException
+	{
+		Thread.sleep(5000);  
+		showRes.click();
+	}
 	
+
+	public void Alllings() throws InterruptedException//--------printing all available languages 
+	{
+		Thread.sleep(3000);
+		System.out.println("Languages Available: " + ling.size());
+		try {
+		    for (WebElement e : ling) {
+		        String languageText = e.getText();
+		       
+		        String[] parts = languageText.split("\n");
+		        if (parts.length == 2) {
+		            System.out.println(parts[0] + " "+parts[1]);
+		        } else {
+		            System.out.println(languageText); 
+		        }
+		    }
+		} catch (Exception el) {
+		    el.printStackTrace();
+		}
+			
+}
+	public List<WebElement> Allleves() throws InterruptedException //------printing all levals
+	{
+		Thread.sleep(3000);
+		List<WebElement> leveList = leve;
+		System.out.println("Levels Available: " + leveList.size());
+		for (WebElement e : leveList) {
+		    String levelText = e.getText();
+		    String[] parts = levelText.split("\n");
+		    if (parts.length == 2) {
+		        System.out.println(parts[0] + " " + parts[1]);
+		    } else {
+		        System.out.println(levelText); 
+		    }
+		}
+		return leveList;
+	}
+	public void selectEng() throws InterruptedException
+	{
+		Thread.sleep(3000);
+		selectEng.click();
+	}
 }

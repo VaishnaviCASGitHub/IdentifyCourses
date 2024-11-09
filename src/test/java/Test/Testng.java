@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -63,28 +64,44 @@ public class Testng {
         logger.info("Browser initialized and navigated to Coursera");
     }
 
-
     // Step 1: Search for web development courses for Beginners level & English Language
     @Test(priority = 1)
     void HomePagesearch() throws InterruptedException, IOException {
         ho = new HomePage(driver);
         ho.searchbutton(); // Clicking on search button and write web development course
-        ho.clicksearch(); // Clicking and searching above course
         ss.takeScreenshot("HomePagesearch");
         logger.info("Home Page Search Screenshot taken");
+        ho.clicksearch(); // Clicking and searching above course
         if(driver.getCurrentUrl().equals("https://www.coursera.org/search?query=Web+Development+Courses&=&language=English"))
         {
-         	driver.quit();
+        	ho.english();
+        	ho.Alllings();
+        	ss.takeScreenshot("Languages");
+            logger.info("Languages Screenshot taken");
+        	ho.langShowResult();
+        	ho.difficultyButton();
+        	ho.Allleves();
+         	ho.beginnerCheckBox();
+         	ss.takeScreenshot("Levels");
+            logger.info("Levels Screenshot taken");
+         	ho.filterSearchButton();
+         	ss.takeScreenshot("searchResults");
+            logger.info("Search Results Screenshot taken");
         }
+        else
+        {
         ho.languageselect(); // Selecting the language
+        ss.takeScreenshot("Languages");
+        logger.info("Languages Screenshot taken");
         ho.levelselect(); // Selecting the level
+        ss.takeScreenshot("Levels");
+        logger.info("Levels Screenshot taken");
+        }
     }
 
     // Step 1: Extract the course names, details & rating for first 2 courses
     @Test(priority = 2, dependsOnMethods = {"HomePagesearch"})
     void searchResults() throws InterruptedException, IOException {
-        ss.takeScreenshot("searchResults");
-        logger.info("Search Results Screenshot taken");
         logger.info("Current URL: {}", driver.getCurrentUrl());
         ho.CourseTitle(); // First two course titles
         ho.CourseRating(); // First two course ratings
@@ -93,31 +110,42 @@ public class Testng {
 
     @Test(priority = 3)
     void deSelect() throws InterruptedException {
+    	if(driver.getCurrentUrl().contains("https://www.coursera.org/search?query=Web%20Development%20Courses&language=English&productDifficultyLevel=Beginner&sortBy=BEST_MATCH&="))
+    	{
+    		
+    	}
+    	else
+    	{
         ho.languageselect(); // Deselecting language
         ho.levelselect(); // Deselecting levels
+    	}
     }
 
     // Step 2: Extract all the languages and different levels with its total count & display them
     @Test(priority = 4, dependsOnMethods = {"HomePagesearch", "searchResults"})
     void languagesandLevels() throws InterruptedException, IOException {
+    	if(driver.getCurrentUrl().contains("https://www.coursera.org/search?query=Web%20Development%20Courses&language=English&productDifficultyLevel=Beginner&sortBy=BEST_MATCH&="))
+    	{
+    		driver.navigate().to("https://www.coursera.org/"); // Navigating back to home page
+    	}
+    	else
+    	{
         ho.Alllanguages(); // Printing all languages
         Thread.sleep(3000);
         ho.Alllevels(); // Printing all levels
         driver.navigate().to("https://www.coursera.org/"); // Navigating back to home page
-        ss.takeScreenshot("LanguagesandLevels");
-        logger.info("Languages and Levels Screenshot taken");
         Thread.sleep(3000);
+    	}
     }
 
     @Test(priority = 5)
     void Navigate() throws InterruptedException, IOException {
         inst = new Institution(driver);
-        inst.ClickEnterprise(); // Click on enterprise
         inst.campusclick(); // Click on my campus
-        inst.locateform(); // Locate form
-        Thread.sleep(2000);
         ss.takeScreenshot("Navigate");
         logger.info("Navigation Screenshot taken");
+        inst.locateform(); // Locate form
+        Thread.sleep(2000);
     }
 
     // Step 3: Filling form and capturing error message
@@ -125,10 +153,12 @@ public class Testng {
     void form(String f_name, String l_name, String email, String phone, String institutiontype, String institutionname, String Jobrole, String department, String whichd, String country, String state) throws InterruptedException, IOException {
         try {
             inst.formdetails(f_name, l_name, email, phone, institutiontype, institutionname, Jobrole, department, whichd, country, state);
+            ss.takeScreenshot("form");
+            logger.info("Form Screenshot taken");
             inst.submitForm();
             Thread.sleep(3000);
             inst.errormsg();
-            ss.takeScreenshot("form");
+            ss.takeScreenshot("Error message");
             logger.info("Error message Screenshot taken");
             Thread.sleep(2000);
         } catch (Exception e) {
@@ -139,7 +169,7 @@ public class Testng {
     @AfterClass
     void close() {
         if (driver != null) {
-            driver.quit();
+            //driver.quit();
             logger.info("Browser closed");
         }
     }
